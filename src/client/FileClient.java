@@ -2,14 +2,7 @@ package client;
 
 import utilitaire.Transport;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.InputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.net.Socket;
-import java.net.SocketException;
 
 public class FileClient {
     private static final int PORT = 1234;

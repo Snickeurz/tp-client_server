@@ -8,7 +8,8 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class FileServer {
+public class FileServer
+{
     // The default port number that this server will listen on
     private final static int DEFAULT_PORT_NUMBER = 1234;
 
@@ -67,7 +68,7 @@ public class FileServer {
             // wait forever until noticing a request to shut down.
             s.setSoTimeout(TIMEOUT);
         } catch (IOException e) {
-            System.err.println("Unable to create socket");
+            System.err.println("Impossible de créer la socket socket");
             e.printStackTrace();
             return;
         } // try
@@ -106,29 +107,53 @@ public class FileServer {
         shutDownFlag = true;
     } // shutDown()
 
+    /**
+     * Inner class.
+     */
     private class FileServerWorker implements Runnable {
+        /**
+         * Transport attribute.
+         */
         private Transport t;
 
+        /**
+         * FileServerWorker's Constructor.
+         * @param s socket
+         */
         FileServerWorker(Socket s) {
-            try{
-                this.t = new Transport(s);
-            }catch (Exception e)
+            try
             {
-
+                // Instance de Transport avec un socket
+                this.t = new Transport(s);
+            }catch (IOException e)
+            {
+                System.out.println("Impossible ce créer le transport : " + e.getStackTrace());
+                System.exit(1);
             }
+            // Démarrage d'un thread FileServer
             new Thread(this).start();
-        } // constructor(Socket)
+        }
 
+        /**
+         * Runnable's implementation.
+         */
         public void run() {
+            // Le nom du fichier
             String fileName = "";
+            // Le flux d'affichage
             PrintStream out = null;
+            // Le fichier
             FileInputStream f;
-
+            // Incrémentation du nombre de ocnnection active
             activeConnectionCount++;
+
  			System.out.println ("Lancement du thread pour gérer le protocole avec un client");
-            // read the file name sent by the client and open the file.
+
+ 			// read the file name sent by the client and open the file.
             try {
+                // Récupération du nom de fichier
                 fileName = (String) this.t.recevoir();
+                // Ouvre le fichier
                 f = new FileInputStream(fileName);
 
                 //Lecture du fichier
@@ -137,18 +162,23 @@ public class FileServer {
                 while ((content = f.read()) != -1) {
                     contenueFichier.append((char)content);
                 }
-                //Envoie du status good :
+                //Envoie du status good au client
                 t.envoyer("Good");
 
-                //Envoie du contenue du fichier
+                //Envoie du contenue du fichier au client
                 t.envoyer(contenueFichier);
 
-            } catch (Exception e) {
+            } catch (IOException | ClassNotFoundException e) {
+                // Décrémenter le nombre de connection active
                 activeConnectionCount--;
-
-                try {
+                System.out.println("Problèmes possible : échec de Transport, échec de la lecture du fichier, fichier non trouvé .. "
+                        + e.getMessage() + e.getStackTrace());
+                try
+                {
+                    // Envoie du mot clef "Bad" au client
                     t.envoyer("Bad");
-                } catch (Exception ie) {
+                } catch (IOException ie) {
+                    System.out.println("Problème lors de l'envoie par Transport : " + ie.getStackTrace());
                 }
                 return;
             }
