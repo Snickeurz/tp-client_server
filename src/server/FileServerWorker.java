@@ -95,13 +95,13 @@ public class FileServerWorker implements Runnable {
             this.setF(this.getFileName());
 
             //call readFile()
-            if(this.readFile().no)
+          /*if(this.readFile().no)
             {
 
             }else{
 
             }
-
+*/
 
         }catch (IOException | ClassNotFoundException e)
         {

@@ -1,0 +1,4 @@
+#TEST 2 :
+Test UTF8 :
+caractères de '1' à '=' [clavier]
+&é"'(-è_çà)=
