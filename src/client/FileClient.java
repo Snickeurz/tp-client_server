@@ -22,22 +22,22 @@ public class FileClient {
         int exitCode = 0;
         Transport transport = null;
 
-        System.out.println("Lancement file Client");
+        System.out.println("[Client] Lancement file Client");
 
         if (!usageOk(argv))
         {
-            System.out.println("Erreur : Il faut 2 arguments.");
+            System.out.println("[Client] Erreur : Il faut 2 arguments.");
             System.exit(1);
         }
 
-        System.out.println("Arguments acceptés !Creation d'un nouveau transport");
+        System.out.println("[Client] Arguments acceptés !Creation d'un nouveau transport");
 
         try
         {
             // Nouvel instance de Transport
             transport = new Transport(argv[0], PORT);
             System.out.println(
-                    String.format("Transport OK avec les arguments suivants :\nadr : %s \n port : %d \n %s", argv[0], PORT, argv[1])
+                    String.format("[Client] Transport OK avec les arguments suivants :\nadr : %s \n port : %d \n %s", argv[0], PORT, argv[1])
             );
         }catch (Exception e)
         {
@@ -47,11 +47,11 @@ public class FileClient {
         }
         try {
             // Envoie du fichier sur le server
-            System.out.println("Envoie du fichier");
+            System.out.println("[Client] Envoie du fichier");
             transport.envoyer(argv[1]);
 
             // Le server doit répondre "Good" or "Bad"
-            System.out.println("Reception du status :");
+            System.out.println("[Client] Reception du status :");
             String serverStatus = (String) transport.recevoir();
 
             if (serverStatus.startsWith("Bad")) {
@@ -65,7 +65,7 @@ public class FileClient {
             }
         }catch (IOException | ClassNotFoundException exception)
         {
-            System.out.println("Erreur lors de l'appel de la méthode transport.recevoir() : " + exception.getMessage());
+            System.out.println("[Client] Erreur lors de l'appel de la méthode transport.recevoir() : " + exception.getMessage());
             exitCode = 1;
         }finally
         {

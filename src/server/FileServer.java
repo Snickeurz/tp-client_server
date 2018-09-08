@@ -92,7 +92,7 @@ public class FileServer
                     return;
                 } // if
                 // Create worker object to process connection.
-                System.out.println ("Acceptation d'un client ");
+                System.out.println ("[Server] Acceptation d'un client ");
                 new FileServerWorker(socket);
             } // while
         } catch (IOException e) {
@@ -147,7 +147,7 @@ public class FileServer
             // Incrémentation du nombre de ocnnection active
             activeConnectionCount++;
 
- 			System.out.println ("Lancement du thread pour gérer le protocole avec un client");
+ 			System.out.println ("[Server] Lancement du thread pour gérer le protocole avec un client");
 
  			// read the file name sent by the client and open the file.
             try {
@@ -155,6 +155,7 @@ public class FileServer
                 fileName = (String) this.t.recevoir();
                 // Ouvre le fichier
                 f = new FileInputStream(fileName);
+                System.out.println("[Server] Réception du fichier.. \n Lecture du fichier");
 
                 //Lecture du fichier
                 int content;
